@@ -11,9 +11,18 @@
 [![Qt 6](https://img.shields.io/badge/Qt-6.5%2B-41cd52.svg)](https://www.qt.io/)
 [![KDE Frameworks 6](https://img.shields.io/badge/KDE%20Frameworks-6-1d99f3.svg)](https://develop.kde.org/products/frameworks/)
 
-<img src="docs/screenshots/keypad.png" width="260" alt="The keypad">
-<img src="docs/screenshots/contacts.png" width="260" alt="The contacts">
-<img src="docs/screenshots/in-call.png" width="260" alt="A call in progress">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/screenshots/keypad-dark.png">
+  <img src="docs/screenshots/keypad.png" width="270" alt="The keypad, with the connected phone named along the top">
+</picture>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/screenshots/contacts-dark.png">
+  <img src="docs/screenshots/contacts.png" width="270" alt="The contacts, with one expanded to show its two numbers">
+</picture>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/screenshots/in-call-dark.png">
+  <img src="docs/screenshots/in-call.png" width="270" alt="A call in progress, with mute, volume and End">
+</picture>
 
 </div>
 

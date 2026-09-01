@@ -1,6 +1,22 @@
+<div align="center">
+
+<img src="packaging/icons/org.unscale.foner.svg" width="96" alt="">
+
 # Foner
 
-Foner makes and receives phone calls through a phone that is paired over Bluetooth.
+**Make and receive phone calls through a phone paired over Bluetooth.**
+
+[![Build](https://github.com/AminBlg/foner/actions/workflows/build.yml/badge.svg)](https://github.com/AminBlg/foner/actions/workflows/build.yml)
+[![License: GPL v3](https://img.shields.io/badge/license-GPL--3.0--or--later-blue.svg)](LICENSE)
+[![Qt 6](https://img.shields.io/badge/Qt-6.5%2B-41cd52.svg)](https://www.qt.io/)
+[![KDE Frameworks 6](https://img.shields.io/badge/KDE%20Frameworks-6-1d99f3.svg)](https://develop.kde.org/products/frameworks/)
+
+<img src="docs/screenshots/keypad.png" width="260" alt="The keypad">
+<img src="docs/screenshots/contacts.png" width="260" alt="The contacts">
+<img src="docs/screenshots/in-call.png" width="260" alt="A call in progress">
+
+</div>
+
 The call stays on the phone and on the mobile network. Foner sends the commands and
 carries the audio, so the phone can stay in your pocket.
 

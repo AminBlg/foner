@@ -32,6 +32,12 @@ find_package(KF6Config ${KF_MIN_VERSION} REQUIRED)
 # implements; QMenu for its context menu is why Widgets is needed.
 find_package(KF6StatusNotifierItem ${KF_MIN_VERSION} REQUIRED)
 
+# main.qml imports org.kde.kitemmodels for KSortFilterProxyModel. Nothing in
+# the C++ links it, so the build succeeded on any machine that happened to
+# have it installed and the dependency went unrecorded until a container
+# without it failed qmllint.
+find_package(KF6ItemModels ${KF_MIN_VERSION} REQUIRED)
+
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_AUTOMOC ON)

@@ -60,8 +60,8 @@ done
 [ -n "$FAMILY" ] || die "Unrecognised distribution: ${PRETTY_NAME:-${ID:-unknown}}.
 
 Foner needs Qt 6 and these KDE frameworks: Kirigami, KCoreAddons, KDBusAddons,
-KI18n, KContacts, KNotifications, KConfig, KStatusNotifierItem. Install them
-with your package manager, then:
+KI18n, KContacts, KNotifications, KConfig, KStatusNotifierItem, KItemModels.
+Install them with your package manager, then:
 
   git clone $REPO && cd foner
   cmake -S . -B build && cmake --build build && sudo cmake --install build"
@@ -78,28 +78,31 @@ arch)
     # configure step rather than the package install.
     PKGS="base-devel cmake extra-cmake-modules git qt6-base qt6-declarative qt6-tools \
 kirigami kcoreaddons kdbusaddons ki18n kcontacts knotifications kconfig \
-kstatusnotifieritem"
+kstatusnotifieritem kitemmodels"
     ;;
 debian)
     INSTALL="sudo apt-get install -y"
     PKGS="build-essential cmake extra-cmake-modules git qt6-base-dev \
 qt6-declarative-dev qt6-tools-dev qt6-l10n-tools libkirigami-dev libkf6coreaddons-dev \
 libkf6dbusaddons-dev libkf6i18n-dev libkf6contacts-dev \
-libkf6notifications-dev libkf6config-dev libkf6statusnotifieritem-dev"
+libkf6notifications-dev libkf6config-dev libkf6statusnotifieritem-dev \
+libkf6itemmodels-dev"
     ;;
 fedora)
     INSTALL="sudo dnf install -y"
     PKGS="gcc-c++ cmake extra-cmake-modules git qt6-qtbase-devel \
 qt6-qtdeclarative-devel qt6-qttools-devel kf6-kirigami-devel kf6-kcoreaddons-devel \
 kf6-kdbusaddons-devel kf6-ki18n-devel kf6-kcontacts-devel \
-kf6-knotifications-devel kf6-kconfig-devel kf6-kstatusnotifieritem-devel"
+kf6-knotifications-devel kf6-kconfig-devel kf6-kstatusnotifieritem-devel \
+kf6-kitemmodels-devel"
     ;;
 suse)
     INSTALL="sudo zypper install -y"
     PKGS="gcc-c++ cmake kf6-extra-cmake-modules git qt6-base-devel \
 qt6-declarative-devel qt6-linguist-devel kf6-kirigami-devel kf6-kcoreaddons-devel \
 kf6-kdbusaddons-devel kf6-ki18n-devel kf6-kcontacts-devel \
-kf6-knotifications-devel kf6-kconfig-devel kf6-kstatusnotifieritem-devel"
+kf6-knotifications-devel kf6-kconfig-devel kf6-kstatusnotifieritem-devel \
+kf6-kitemmodels-devel"
     ;;
 esac
 

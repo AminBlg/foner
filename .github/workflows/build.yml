@@ -23,7 +23,7 @@ jobs:
             cmake ninja git \
             qt6-base qt6-declarative qt6-tools \
             extra-cmake-modules kirigami kcoreaddons kdbusaddons ki18n \
-            kcontacts knotifications kconfig kstatusnotifieritem \
+            kcontacts knotifications kconfig kstatusnotifieritem kitemmodels \
             appstream desktop-file-utils
 
       - uses: actions/checkout@v4

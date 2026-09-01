@@ -21,6 +21,7 @@ depends=(
   'knotifications'
   'kconfig'
   'kstatusnotifieritem'
+  'kitemmodels'
 )
 makedepends=('cmake' 'ninja' 'extra-cmake-modules' 'qt6-tools' 'git')
 # Foner places no calls on its own. The audio gateway lives in PipeWire and the

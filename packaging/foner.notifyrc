@@ -1,0 +1,48 @@
+[Global]
+IconName=call-start
+Comment=Foner
+Name=Foner
+DesktopEntry=org.unscale.foner
+
+[Event/incoming-call]
+Name=Incoming call
+Comment=Someone is calling the paired phone
+Action=Popup|Sound
+Sound=phone-incoming-call
+Urgency=Critical
+
+[Event/missed-call]
+Name=Missed call
+Comment=A call rang and was not answered
+Action=Popup
+Urgency=Normal
+
+[Event/call-ended]
+Name=Call ended
+Comment=A call finished, with how long it lasted
+Action=Popup
+Urgency=Low
+
+[Event/call-failed]
+Name=Call failed
+Comment=A call could not be placed, or the phonebook could not be read
+Action=Popup
+Urgency=Normal
+
+[Event/phone-connected]
+Name=Phone connected
+Comment=The paired phone connected and calls can be placed
+Action=Popup
+Urgency=Low
+
+[Event/phone-disconnected]
+Name=Phone disconnected
+Comment=The paired phone went away and calls cannot be placed
+Action=Popup
+Urgency=Normal
+
+[Event/contacts-loaded]
+Name=Contacts loaded
+Comment=Contacts or call history finished downloading from the phone
+Action=Popup
+Urgency=Low

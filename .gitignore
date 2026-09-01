@@ -1,0 +1,33 @@
+# Out-of-source build
+build/
+
+# In-source CMake/Qt output. A configure was once run at the repo root and inside
+# src/, so these appear in both places.
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+CTestTestfile.cmake
+install_manifest.txt
+Makefile
+bin/
+.qt/
+*_autogen/
+*.o
+*.o.d
+
+# KDE ECM development-environment scripts
+prefix.sh
+prefix.sh.fish
+ecm_uninstall.cmake
+
+# Editor and tooling
+compile_commands.json
+.claude/
+.cache/
+*.user
+
+# Working notes from development. These record defects in a prototype and carry
+# machine-specific detail; they are not useful to anyone else.
+docs/polish-audit.md
+docs/workflow-map.md
+docs/superpowers/

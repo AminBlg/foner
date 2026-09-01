@@ -1,0 +1,75 @@
+# SPDX-FileCopyrightText: 2026 AminBlg
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+name: Build and test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    # Arch, because the runner image carries Qt 6.4 and KDE Frameworks 5, which
+    # are older than this project needs. Arch also matches the machine the code
+    # is developed on, so a break here is a real break.
+    container: archlinux:base-devel
+
+    steps:
+      - name: Install the dependencies
+        run: |
+          pacman -Syu --noconfirm --needed \
+            cmake ninja git \
+            qt6-base qt6-declarative qt6-tools \
+            extra-cmake-modules kirigami kcoreaddons kdbusaddons ki18n \
+            kcontacts knotifications kconfig kstatusnotifieritem \
+            appstream desktop-file-utils
+
+      - uses: actions/checkout@v4
+
+      - name: Configure
+        # -Wall and -Wextra are the point of the step below. Without them the
+        # build emits almost nothing and "fail on any warning" passes
+        # vacuously, which is how an overflowing hex escape in the tests
+        # survived: the compiler knew, and was never asked.
+        run: >
+          cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug
+          -DCMAKE_CXX_FLAGS="-Wall -Wextra"
+
+      - name: Build, and fail on any compiler warning
+        run: |
+          cmake --build build -j 2>&1 | tee build.log
+          if grep 'warning:' build.log; then
+            exit 1
+          fi
+
+      - name: Test
+        run: ctest --test-dir build --output-on-failure
+
+      - name: Check the QML
+        # Unqualified access is noise here - every context property the app
+        # injects from C++ trips it - but the other categories are real, and
+        # missing-property in particular catches a binding to a theme role that
+        # does not exist, which renders as nothing at all.
+        run: |
+          /usr/lib/qt6/bin/qmllint src/app/qml/*.qml -I /usr/lib/qt6/qml \
+            --unqualified disable 2>&1 | tee qmllint.log
+          if grep -E 'Warning|Error' qmllint.log; then
+            exit 1
+          fi
+
+      - name: Code health must not regress
+        run: |
+          sudo pacman -S --noconfirm --needed clang jq npm python-pipx
+          pipx install lizard
+          export PATH="$HOME/.local/bin:$PATH"
+          # UPDATE_BASELINE=0: CI reports an improvement but never rewrites the
+          # file. A commit nobody reviewed should not tighten the ratchet; the
+          # author commits a new baseline deliberately.
+          UPDATE_BASELINE=0 ./scripts/gate.sh
+
+      - name: Check the packaging files
+        run: |
+          desktop-file-validate packaging/org.unscale.foner.desktop
+          appstreamcli validate --no-net packaging/org.unscale.foner.metainfo.xml

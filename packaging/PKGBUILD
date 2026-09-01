@@ -1,0 +1,58 @@
+# SPDX-FileCopyrightText: 2026 AminBlg
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+# Maintainer: AminBlg <https://github.com/AminBlg>
+
+pkgname=foner
+pkgver=0.1.0
+pkgrel=1
+pkgdesc="Make and receive phone calls through a paired Bluetooth phone, from your KDE desktop"
+arch=('x86_64' 'aarch64')
+url="https://github.com/AminBlg/foner"
+license=('GPL-3.0-or-later')
+depends=(
+  'qt6-base'
+  'qt6-declarative'
+  'kirigami'
+  'kcoreaddons'
+  'kdbusaddons'
+  'ki18n'
+  'kcontacts'
+  'knotifications'
+  'kconfig'
+  'kstatusnotifieritem'
+)
+makedepends=('cmake' 'ninja' 'extra-cmake-modules' 'qt6-tools' 'git')
+# Foner places no calls on its own. The audio gateway lives in PipeWire and the
+# phonebook comes from obexd, so without these it starts and finds no device.
+optdepends=(
+  'pipewire: the telephony service that talks to the phone'
+  'bluez: Bluetooth support'
+  'bluez-obex: reading the phonebook and the call history from the phone'
+)
+# A git source pinned to the release tag. Git is content addressed, so the objects
+# verify themselves; SKIP here is the normal and only accepted value for a VCS
+# source and does not mean "download anything and trust it". Pin #commit= instead
+# of #tag= if you need protection against the tag being moved.
+source=("$pkgname::git+$url.git#tag=v$pkgver")
+sha256sums=('SKIP')
+
+pkgver() {
+  cd "$srcdir/$pkgname"
+  git describe --tags | sed 's/^v//;s/-/./g'
+}
+
+build() {
+  cmake -S "$pkgname" -B build -G Ninja \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_INSTALL_PREFIX=/usr
+  cmake --build build
+}
+
+check() {
+  ctest --test-dir build --output-on-failure
+}
+
+package() {
+  DESTDIR="$pkgdir" cmake --install build
+}

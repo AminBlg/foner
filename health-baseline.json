@@ -1,0 +1,13 @@
+{
+  "generated": "2026-09-01T10:37:22Z",
+  "commit": "3dc6384",
+  "complexity_over_10": 7,
+  "complexity_max": 17,
+  "gcc_warnings": 0,
+  "clang_tidy_warnings": 83,
+  "qml_warnings": 0,
+  "duplication_percent": 0.932884166882612,
+  "test_assertions": 141,
+  "qml_files_over_200_lines": 1,
+  "untranslated_strings": 0
+}

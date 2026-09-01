@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+# SPDX-FileCopyrightText: 2026 AminBlg
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+# Install with: ln -sf ../../scripts/pre-commit .git/hooks/pre-commit
+#
+# The full gate rebuilds from scratch and takes minutes, which is more than
+# anyone will tolerate before every commit - and a hook people disable is
+# worse than no hook. So this runs only the checks that are fast and catch the
+# mistakes actually made in this codebase. CI runs the whole gate.
+#
+# FONER_SKIP_HOOK=1 git commit   to bypass deliberately.
+
+set -uo pipefail
+
+[ "${FONER_SKIP_HOOK:-0}" = 1 ] && exit 0
+
+cd "$(git rev-parse --show-toplevel)"
+FAILED=0
+
+STAGED_QML=$(git diff --cached --name-only --diff-filter=ACM | grep '\.qml$' || true)
+STAGED_CPP=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(cpp|h)$' || true)
+
+# qmllint on staged QML. This is the check that caught a binding to a theme
+# role which does not exist, drawing an element with no border at all.
+if [ -n "$STAGED_QML" ] && [ -x /usr/lib/qt6/bin/qmllint ]; then
+    OUT=$(/usr/lib/qt6/bin/qmllint $STAGED_QML -I /usr/lib/qt6/qml \
+        --unqualified disable 2>&1)
+    if echo "$OUT" | grep -qE 'Warning:|Error:'; then
+        echo "qmllint:" >&2
+        echo "$OUT" | grep -E 'Warning:|Error:' >&2
+        FAILED=1
+    fi
+fi
+
+# Untranslated user-facing strings, staged QML only.
+if [ -n "$STAGED_QML" ]; then
+    BARE=$(grep -nE '^\s*(text|placeholderText|title|description|tooltip|Accessible\.name|Accessible\.description):\s*"[^"]' \
+        $STAGED_QML 2>/dev/null | grep -v 'i18n' || true)
+    if [ -n "$BARE" ]; then
+        echo "user-facing strings not wrapped in i18n():" >&2
+        echo "$BARE" >&2
+        FAILED=1
+    fi
+fi
+
+# Compile warnings for staged C++, against the existing build tree so this
+# stays incremental and quick.
+if [ -n "$STAGED_CPP" ] && [ -d build ]; then
+    OUT=$(cmake --build build -j 2>&1 | grep 'warning:' | grep -v autogen || true)
+    if [ -n "$OUT" ]; then
+        echo "compiler warnings:" >&2
+        echo "$OUT" >&2
+        FAILED=1
+    fi
+fi
+
+if [ "$FAILED" = 1 ]; then
+    echo >&2
+    echo "Commit refused. Fix the above, or FONER_SKIP_HOOK=1 git commit to bypass." >&2
+    exit 1
+fi
+exit 0

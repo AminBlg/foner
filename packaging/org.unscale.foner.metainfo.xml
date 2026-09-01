@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>org.unscale.foner</id>
+
+  <name>Foner</name>
+  <summary>Calls through your phone</summary>
+
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0-or-later</project_license>
+
+  <description>
+    <p>
+      Foner turns a paired Bluetooth phone into a phone you can answer from your
+      desktop. Calls stay on the phone and on the mobile network. Foner sends the
+      commands and carries the audio, so you can keep the phone in your pocket.
+    </p>
+    <p>Foner can:</p>
+    <ul>
+      <li>Dial a number, answer a call, and end a call.</li>
+      <li>Search your contacts by name or by number, including keypad search.</li>
+      <li>Read the contacts and the call history from the phone.</li>
+      <li>Hold one call and answer another, swap between two calls, and join them.</li>
+      <li>Mute the microphone, set the speaker level, and send keypad tones.</li>
+      <li>Open a telephone link from any other application.</li>
+    </ul>
+    <p>
+      Foner needs PipeWire with telephony support, BlueZ, and a phone that is paired
+      and connected over the hands-free profile.
+    </p>
+  </description>
+
+  <developer id="io.github.aminblg">
+    <name>AminBlg</name>
+  </developer>
+
+  <url type="homepage">https://github.com/AminBlg/foner</url>
+  <url type="bugtracker">https://github.com/AminBlg/foner/issues</url>
+  <url type="vcs-browser">https://github.com/AminBlg/foner</url>
+
+  <branding>
+    <color type="primary" scheme_preference="light">#c7e6d0</color>
+    <color type="primary" scheme_preference="dark">#12432a</color>
+  </branding>
+
+  <launchable type="desktop-id">org.unscale.foner.desktop</launchable>
+
+  <provides>
+    <binary>foner</binary>
+  </provides>
+
+  <categories>
+    <category>Network</category>
+    <category>Telephony</category>
+  </categories>
+
+  <keywords>
+    <keyword>phone</keyword>
+    <keyword>call</keyword>
+    <keyword>dialer</keyword>
+    <keyword>bluetooth</keyword>
+  </keywords>
+
+  <content_rating type="oars-1.1"/>
+
+  <releases>
+    <release version="0.1.0" date="2026-08-17">
+      <description>
+        <p>First release.</p>
+      </description>
+    </release>
+  </releases>
+</component>

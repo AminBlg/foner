@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#3daee9"/>
+      <stop offset="1" stop-color="#1e6fa3"/>
+    </linearGradient>
+  </defs>
+  <rect x="8" y="8" width="112" height="112" rx="24" fill="url(#bg)"/>
+  <!-- handset silhouette -->
+  <path d="M52 34
+           l10 4
+           q3 1.2 2.6 4
+           l-2.6 12
+           q-0.4 2.2 -2.4 3
+           l-8.4 3.6
+           q8 12 18 20
+           l8.2 -4.8
+           q1.8 -1 3.6 -0.6
+           l12 2.8
+           q2.8 0.6 3.4 3
+           l2.8 11.6
+           q0.6 2.6 -1.4 4.2
+           l-8.2 6.4
+           q-2 1.6 -4.8 1.6
+           c-14 -0.2 -27.8 -5.6 -38.6 -16.4
+           C29.2 70.6 26.4 56.6 26.4 44
+           q0 -4 2.2 -5.6
+           l9.8 -6.2
+           q2.4 -1.5 5 -0.6
+           z"
+        fill="#ffffff" opacity="0.95"/>
+</svg>

@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+Name=Foner
+GenericName=Phone dialer
+Comment=Make and receive phone calls via a paired Bluetooth phone
+Categories=Qt;KDE;Network;Telephony;
+Icon=org.unscale.foner
+Exec=foner %u
+Terminal=false
+StartupNotify=true
+StartupWMClass=org.unscale.foner
+MimeType=x-scheme-handler/tel;

@@ -1,0 +1,39 @@
+id: org.unscale.foner
+runtime: org.kde.Platform
+runtime-version: '6.9'
+sdk: org.kde.Sdk
+command: foner
+rename-desktop-file: org.unscale.foner.desktop
+rename-icon: org.unscale.foner
+finish-args:
+  # Wayland, with an X11 fallback.
+  - --socket=wayland
+  - --socket=x11
+  - --share=ipc
+  # Call audio arrives as a PipeWire stream.
+  - --socket=pulseaudio
+  # Named services instead of the whole session bus. Everything this app talks to
+  # is on the session bus: org.pipewire.Telephony is owned by wireplumber and
+  # org.bluez.obex by obexd. It makes no system-bus calls, so it needs no
+  # --system-talk-name entries.
+  # NOTE: not yet proven inside a sandbox. This list is derived from the D-Bus
+  # calls the source actually makes, not from a flatpak run.
+  #
+  # UNFINISHED: this manifest has never been built. KContacts is KDE PIM rather
+  # than a Framework, so org.kde.Platform probably does not carry it and it will
+  # need its own module here. Do not present this as a working Flatpak.
+  - --talk-name=org.pipewire.Telephony
+  - --talk-name=org.bluez.obex
+  - --talk-name=org.freedesktop.Notifications
+  # BlueZ proper is on the system bus, unlike everything above. Foner reads the
+  # device alias, icon and battery from it, so this is a system-talk-name.
+  - --system-talk-name=org.bluez
+modules:
+  - name: foner
+    buildsystem: cmake
+    builddir: true
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+    sources:
+      - type: dir
+        path: ..

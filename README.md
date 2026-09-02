@@ -9,7 +9,7 @@
 [![Build](https://github.com/AminBlg/foner/actions/workflows/build.yml/badge.svg)](https://github.com/AminBlg/foner/actions/workflows/build.yml)
 [![License: GPL v3](https://img.shields.io/badge/license-GPL--3.0--or--later-blue.svg)](LICENSE)
 [![Qt 6](https://img.shields.io/badge/Qt-6.5%2B-41cd52.svg)](https://www.qt.io/)
-[![KDE Frameworks 6](https://img.shields.io/badge/KDE%20Frameworks-6-1d99f3.svg)](https://develop.kde.org/products/frameworks/)
+[![KDE Frameworks 6.8+](https://img.shields.io/badge/KDE%20Frameworks-6.8%2B-1d99f3.svg)](https://develop.kde.org/products/frameworks/)
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/screenshots/keypad-dark.png">
@@ -40,7 +40,7 @@ curl -fsSL https://raw.githubusercontent.com/AminBlg/foner/main/scripts/install.
 Installs the dependencies, builds, tests, and installs to `/usr/local`. It stops with a
 reason rather than guessing, and installs nothing until every dependency is present.
 
-Needs KDE Frameworks 6, so Ubuntu 24.04 and RHEL 9 will not work.
+Needs Qt 6.5 and KDE Frameworks 6.8, so Ubuntu 24.04 and RHEL 9 will not work.
 
 Into `~/.local` instead, without root:
 

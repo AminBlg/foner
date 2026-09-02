@@ -6,7 +6,11 @@ cmake_minimum_required(VERSION 3.16)
 project(foner VERSION 0.1.0 LANGUAGES CXX)
 
 set(QT_MIN_VERSION "6.5.0")
-set(KF_MIN_VERSION "6.0.0")
+# 6.8, not 6.0: main.cpp uses KLocalizedQmlContext, which ki18n marks \since
+# 6.8. Asking for 6.0 promised a build on releases where that class does not
+# exist, and nothing here could notice, because every framework installed on
+# this machine is far newer than either number.
+set(KF_MIN_VERSION "6.8.0")
 
 find_package(ECM ${KF_MIN_VERSION} REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH})

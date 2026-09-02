@@ -333,7 +333,13 @@ Kirigami.ApplicationWindow {
                         anchors.right: parent.right
                         anchors.bottom: parent.bottom
                         height: 1
-                        color: Qt.alpha(Kirigami.Theme.textColor, 0.15)
+                        // Qt.alpha() would say this more plainly, but it was
+                        // introduced in Qt 6.11 and this builds against 6.5.
+                        // Qt.rgba with the components read off the theme colour
+                        // does the same thing everywhere.
+                        color: Qt.rgba(Kirigami.Theme.textColor.r,
+                                       Kirigami.Theme.textColor.g,
+                                       Kirigami.Theme.textColor.b, 0.15)
                     }
                 }
 

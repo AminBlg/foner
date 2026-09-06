@@ -1,8 +1,12 @@
-# Foner — project status
+# Foner: project status
 
-Written 2026-08-28. A snapshot of what works, what does not, and what is known about
-the interface underneath. The README describes the application; this describes its
+Written 2026-09-02. A snapshot of what works, what does not, and what is known about
+the interface underneath. The README describes the application. This describes its
 condition.
+
+The commit count is low because the history was flattened before publication. A commit
+message carried the author's phone Bluetooth address, and a scan of the tracked files
+does not catch that.
 
 ## Where it stands
 
@@ -10,16 +14,16 @@ Foner is a working desktop dialler. Calls are placed, answered and ended against
 phone, contacts and history arrive over Bluetooth, and the window survives being closed
 because the tray keeps it listening. It is used daily by its author on Arch with Plasma.
 
-It is one person's application on one paired handset. Nothing here has been run against a
+It is one person's application on one paired handset. Nothing here ran against a
 second phone model, a second desktop, or a second distribution.
 
 | | |
 |---|---|
 | Version | 0.1.0, untagged |
-| Source | 6,117 lines of C++ and QML |
+| Source | 6,183 lines of C++ and QML |
 | Tests | 3 binaries, 141 assertions |
-| Frameworks | Qt 6, Kirigami, and 8 KDE frameworks |
-| Repository | `AminBlg/foner`, private, 59 commits |
+| Requires | Qt 6.5, KDE Frameworks 6.8, and 9 KDE frameworks |
+| Repository | `AminBlg/foner`, private, 7 commits |
 
 ## Proved against a real phone
 
@@ -33,12 +37,12 @@ second phone model, a second desktop, or a second distribution.
 
 ## Built, not yet proved
 
-- **Service codes.** `*710#` goes out; no reply has been read from a live network. HFP
+- **Service codes.** `*710#` goes out. No reply came back from a live network. HFP
   carries no channel for one, so the answer can only appear on the handset.
-- **Two calls at once** — hold, swap and join. The code paths exist and the gateway
-  exposes the methods; the situation has not arisen in testing.
+- **Two calls at once**, meaning hold, swap and join. The code paths exist and the gateway
+  exposes the methods. The situation did not arise in testing.
 - **The About page and vCard export.** Export has a round-trip test covering accents and
-  multi-number contacts, but neither has been used against a phone.
+  multi-number contacts, but neither ran against a phone.
 
 ## Known limits
 
@@ -55,6 +59,10 @@ introspecting a live gateway, and each is recorded so it is not rediscovered.
   replaces the first notification. Both calls still get a row in the window.
 - **`Kirigami.Theme` has no `separatorColor`.** Twenty colour roles, and separator is not
   among them. Binding to it yields `undefined` and draws nothing.
+- **`Qt.alpha()` needs Qt 6.11.** The build asks for 6.5, so the code uses `Qt.rgba` with
+  the components read off the theme colour instead.
+- **`KLocalizedQmlContext` needs Frameworks 6.8.** That class sets the framework floor.
+  Every other KDE API the code calls is 6.0 or older.
 
 ## Not done
 
@@ -66,7 +74,7 @@ introspecting a live gateway, and each is recorded so it is not rediscovered.
   are the style's default and nothing overrides them, but that has not been confirmed on
   a real display.
 - The Flatpak manifest is written and has never been built. It does not list KContacts,
-  which the KDE runtime may not carry. Building it needs flatpak-builder, which is not
+  which the KDE runtime can lack. Building it needs flatpak-builder, which is not
   installed here, and roughly 1.5 GB of KDE SDK, so the question of what else the runtime
   lacks is still open.
 - **No `v0.1.0` tag exists.** `packaging/PKGBUILD` fetches `git+$url.git#tag=v$pkgver`,
@@ -84,16 +92,16 @@ top of the recents reload button.
 
 **A class of bug worth naming.** Connecting `commandFailed` to a visible banner made
 every refused command visible, which exposed controls that stayed enabled in states where
-their command could only fail — dialling during a call, sending tones to a call that was
-merely ringing, merging against a leg that had not been answered, switching phones
+their command can only fail: dialling during a call, sending tones to a call that was
+merely ringing, merging against a leg that nobody answered, switching phones
 mid-call. Five of those were found and fixed. They had all been failing silently for as
 long as they had existed.
 
 **Two bugs found by compilers rather than by reading.** An overflowing hex escape in the
-contacts test meant the accent round trip was passing on the wrong bytes; `-Wall` had
-always known. A binding to a theme role that does not exist drew the phone chip with no
-border; `qmllint` had always known. Both checks now run in CI, where the warning step had
-previously been passing vacuously because nothing enabled any warnings.
+contacts test meant the accent round trip passed on the wrong bytes. `-Wall` knew all
+along. A binding to a theme role that does not exist drew the phone chip with no
+border. `qmllint` knew all along. Both checks now run in CI, where the warning step
+previously passed for nothing, because nothing enabled any warnings.
 
 **Since then**, a health ratchet: `scripts/health.sh` measures eight metrics and
 `scripts/gate.sh` refuses a regression, both wired into CI and a pre-commit hook. The
@@ -102,16 +110,26 @@ and the enabled-in-impossible-state class was re-checked systematically with a m
 every control against every call state rather than waiting for the next one to surface.
 It found one more: Swap was offered while the second call was still ringing.
 
+**Then a one-line installer**, and the containers that tested it found four faults that no
+local check can find. Three package names were wrong on three distributions. Qt6
+LinguistTools was required by CMake and named in no package list. `kitemmodels` was
+imported by the QML and declared nowhere at all, because a QML import leaves no trace in
+the linker. The framework floor said 6.0 and the code needs 6.8.
+
+Each one was invisible here for the same reason: this machine has every dependency
+installed and every version far above the declared floor, so a missing declaration and a
+wrong minimum both look exactly like success.
+
 ## Four other implementations
 
 Built to judge the interface outside Kirigami's constraints, then set aside. Each carries
-its own D-Bus layer ported from the C++, and each passes the same seven behavioural tests
-— accent folding, T9 search, number normalisation, the vCard round trip — independently
-verified in Rust, JavaScript, Python and Dart.
+its own D-Bus layer ported from the C++. Each passes the same seven behavioural tests,
+which are accent folding, T9 search, number normalisation and the vCard round trip.
+Each was verified in Rust, JavaScript, Python and Dart.
 
 | | Stack | Verdict |
 |---|---|---|
-| `foner-tauri` | Rust + webview | Kept; shares its UI with the Electron build |
+| `foner-tauri` | Rust + webview | Kept. Shares its UI with the Electron build |
 | `foner-electron` | Node | Rejected on looks |
 | `foner-gtk` | Python, GTK4 + libadwaita | Rejected on looks |
 | `foner-flutter` | Dart | Rejected on looks |
@@ -123,8 +141,9 @@ changing the answer.
 
 1. **Tag `v0.1.0`.** Without it the packaging recipe is broken for everyone but its
    author.
-2. **Push the eight local commits.**
-3. **Finish keyboard-only operation.** The audit above says what is wrong; none of it is
+2. **Make the repository public.** The install command in the README fetches a script
+   over HTTPS, so it works for nobody else while the repository is private.
+3. **Finish keyboard-only operation.** The audit above says what is wrong. None of it is
    fixed.
 4. **Test on a second phone.** Every interface fact recorded here comes from one handset,
    and some of them are certainly properties of that handset rather than of HFP.
@@ -134,7 +153,7 @@ changing the answer.
 Ideas raised and not acted on, recorded so they are not raised again as though new.
 
 - A per-row Call button on the keypad suggestion strip. The strip stopped dialling on
-  touch so numbers could be selected and copied; a button would restore the shortcut
-  without the hazard, at the cost of a control on a strip meant to stay compact.
+  touch so a reader can select and copy a number. A button restores the shortcut without
+  the hazard, at the cost of a control on a strip meant to stay compact.
 - `AgModel::get` was removed as dead. If a device picker ever needs indexed access the
   way the incoming-call sheet needs it for calls, it comes back.

@@ -78,7 +78,10 @@ fi
 DUP_PERCENT=null
 DUP_DIR=$(mktemp -d)
 if command -v npx >/dev/null; then
-    npx --yes jscpd@5 src --reporters json --output "$DUP_DIR" --silent \
+    # Pinned exactly. jscpd 5.2.1 reports five more duplicated lines than
+    # 5.2.0 on the same files, which failed CI on a README-only commit.
+    # Bump the pin and the baseline together, in one commit.
+    npx --yes jscpd@5.2.0 src --reporters json --output "$DUP_DIR" --silent \
         --min-lines 5 \
         --ignore "**/foner_autogen/**,**/fonerprobe_autogen/**,**/.qt/**" \
         >/dev/null 2>&1

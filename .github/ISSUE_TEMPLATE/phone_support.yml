@@ -1,0 +1,50 @@
+name: 📱 Phone Support / Compatibility
+description: A phone is not detected, is not fully supported, or you would like support added.
+title: "[Phone]: "
+labels: ["area: telephony", "needs: triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Foner speaks to the phone through the PipeWire telephony interface over the
+        Bluetooth hands-free profile. The output below tells us what your phone
+        reports, which is what we need to add or fix support.
+
+        > **Known limitation:** Foner has run against one phone model so far.
+
+  - type: checkboxes
+    id: preflight
+    attributes:
+      label: Pre-flight checklist
+      options:
+        - label: The phone is paired in the Bluetooth settings and connected.
+          required: true
+        - label: I searched existing issues for my phone.
+          required: true
+
+  - type: input
+    id: phone
+    attributes:
+      label: Phone model and OS version
+      placeholder: e.g. Galaxy S24, One UI 7
+    validations:
+      required: true
+
+  - type: dropdown
+    id: behavior
+    attributes:
+      label: What is the problem?
+      options:
+        - Phone is not detected at all
+        - Phone is detected but a feature does not work
+        - Requesting support for a phone not yet supported
+    validations:
+      required: true
+
+  - type: textarea
+    id: introspect
+    attributes:
+      label: "`busctl --user call org.pipewire.Telephony /org/pipewire/Telephony org.freedesktop.DBus.ObjectManager GetManagedObjects` output"
+      render: text
+    validations:
+      required: true

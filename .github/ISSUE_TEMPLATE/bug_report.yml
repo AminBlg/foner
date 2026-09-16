@@ -1,0 +1,64 @@
+name: 🐞 Bug Report
+description: Something is broken or behaves incorrectly.
+title: "[Bug]: "
+labels: ["type: bug", "needs: triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for filing a bug report. Foner talks to the phone through PipeWire and
+        BlueZ, so **phone, desktop, and version details are essential**. Issues without
+        them are usually impossible to reproduce.
+
+  - type: checkboxes
+    id: preflight
+    attributes:
+      label: Pre-flight checklist
+      options:
+        - label: I searched [existing issues](https://github.com/AminBlg/foner/issues?q=is%3Aissue) and this is not a duplicate.
+          required: true
+        - label: I am on the latest `main` build.
+          required: true
+        - label: The phone is paired, connected, and shown in the bar at the top of the window.
+          required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Foner commit
+      description: Output of `git rev-parse --short HEAD` in the checkout you built.
+      placeholder: e.g. 6b56853
+    validations:
+      required: true
+
+  - type: input
+    id: phone
+    attributes:
+      label: Phone model and OS version
+      placeholder: e.g. Pixel 8, Android 15
+    validations:
+      required: true
+
+  - type: input
+    id: desktop
+    attributes:
+      label: Distribution, desktop, PipeWire version
+      description: Run `pipewire --version`.
+      placeholder: e.g. Arch, Plasma 6.4, PipeWire 1.4.2
+    validations:
+      required: true
+
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What you did, what you expected, and what happened instead.
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Log output
+      description: Run `QT_LOGGING_RULES="foner.*=true" foner` and paste the lines around the failure. Remove phone numbers first.
+      render: text

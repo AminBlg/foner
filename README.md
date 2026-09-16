@@ -40,17 +40,93 @@
 
 Runs on Linux with Plasma, or any desktop with PipeWire and BlueZ.
 
----
+## Install
 
-## Beyond KDE Connect
+> [!IMPORTANT]
+> Foner needs **PipeWire 1.4 or newer with its telephony module** and **BlueZ**. The phone must be paired and connected over the hands-free profile. Without those it starts and reports that no phone is connected.
 
-KDE Connect tells you that the phone is ringing. Foner picks up. Things Foner does that KDE Connect will not:
+One command on any supported distribution. The install script picks the package manager, installs the dependencies, builds, tests, and installs to `/usr/local`. It stops with a reason rather than guessing, and installs nothing until every dependency is present.
 
-- **Answer on the desktop.** Answer, decline, hold, swap, and end calls from the window, the tray, or the notification.
-- **Carry the audio.** The call comes through the speakers and the microphone of this computer. The phone stays in your pocket.
-- **Dial from a keypad.** A real dial pad with keypad tones, not a confirmation box for a `tel:` link.
-- **Keep the phonebook.** The contacts and the call history are read from the phone over Bluetooth and kept on disk.
-- **Stay native.** C++ and Kirigami, no account, no cloud, no telemetry. The call never leaves the phone and the mobile network.
+```sh
+curl -fsSL https://raw.githubusercontent.com/AminBlg/foner/main/scripts/install.sh | sh
+```
+
+Into `~/.local` instead, without root:
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/AminBlg/foner/main/scripts/install.sh | FONER_PREFIX=~/.local sh
+```
+
+The script knows the package names for Arch, Debian, Ubuntu, Fedora, and openSUSE. It recognises their derivatives by the `ID_LIKE` field or by the package manager on the path. On any other distribution it stops, prints the dependency list, and installs nothing. Install the dependencies yourself, then run it again with `FONER_SKIP_PACKAGES=1`. It then builds with what is there:
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/AminBlg/foner/main/scripts/install.sh | FONER_SKIP_PACKAGES=1 sh
+```
+
+At the end the script reports the installed PipeWire version and says whether it is new enough for calls.
+
+### Supported distributions
+
+Foner needs Qt 6.5, KDE Frameworks 6.8, and PipeWire 1.4. The build needs the first two. Calls need the third.
+
+| Distribution | Status |
+|---|---|
+| Arch Linux, CachyOS, EndeavourOS, Manjaro | Works |
+| Fedora 42 and newer | Works |
+| Ubuntu and Kubuntu 25.10 and newer | Works |
+| Debian 13 | Works |
+| openSUSE Tumbleweed, Leap 16.0 | Works |
+| Ubuntu and Kubuntu 25.04 | Builds, but PipeWire 1.2 has no telephony module, so no calls |
+| KDE neon | Builds, but PipeWire from the Ubuntu 24.04 base has no telephony module, so no calls |
+| Ubuntu 24.04, Debian 12, RHEL 9, openSUSE Leap 15.6 | No KDE Frameworks 6, so no build |
+
+Only Arch with Plasma ran against a real phone. The others are judged from the package versions they ship.
+
+## Build
+
+Install the dependencies with your package manager, then run CMake.
+
+**Arch Linux**
+
+```sh
+sudo pacman -S --needed base-devel cmake extra-cmake-modules git qt6-base qt6-declarative qt6-tools \
+  kirigami kcoreaddons kdbusaddons ki18n kcontacts knotifications kconfig kstatusnotifieritem kitemmodels
+```
+
+**Debian and Ubuntu**
+
+```sh
+sudo apt-get install build-essential cmake extra-cmake-modules git qt6-base-dev qt6-declarative-dev \
+  qt6-tools-dev qt6-l10n-tools libkirigami-dev libkf6coreaddons-dev libkf6dbusaddons-dev libkf6i18n-dev \
+  libkf6contacts-dev libkf6notifications-dev libkf6config-dev libkf6statusnotifieritem-dev libkf6itemmodels-dev
+```
+
+**Fedora**
+
+```sh
+sudo dnf install gcc-c++ cmake extra-cmake-modules git qt6-qtbase-devel qt6-qtdeclarative-devel \
+  qt6-qttools-devel kf6-kirigami-devel kf6-kcoreaddons-devel kf6-kdbusaddons-devel kf6-ki18n-devel \
+  kf6-kcontacts-devel kf6-knotifications-devel kf6-kconfig-devel kf6-kstatusnotifieritem-devel kf6-kitemmodels-devel
+```
+
+**openSUSE**
+
+```sh
+sudo zypper install gcc-c++ cmake kf6-extra-cmake-modules git qt6-base-devel qt6-declarative-devel \
+  qt6-linguist-devel kf6-kirigami-devel kf6-kcoreaddons-devel kf6-kdbusaddons-devel kf6-ki18n-devel \
+  kf6-kcontacts-devel kf6-knotifications-devel kf6-kconfig-devel kf6-kstatusnotifieritem-devel kf6-kitemmodels-devel
+```
+
+Then:
+
+```sh
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+cmake --build build -j
+ctest --test-dir build --output-on-failure
+sudo cmake --install build
+```
+
+[docs/demo-contacts.vcf](docs/demo-contacts.vcf) holds invented contacts, so the search and the contact list can be seen with no phone connected.
 
 ## Features
 
@@ -85,43 +161,6 @@ Foner talks to PipeWire over the `org.pipewire.Telephony` D-Bus interface. PipeW
 
 [docs/M0-selfio-notes.md](docs/M0-selfio-notes.md) records what the live interface does, and where it differs from its own introspection data.
 
-## Install
-
-> [!IMPORTANT]
-> Foner needs **PipeWire with its telephony module**, **BlueZ**, and a phone that is paired and connected over the hands-free profile. Without those it starts and reports that no phone is connected.
-
-Needs Qt 6.5 and KDE Frameworks 6.8, so Ubuntu 24.04 and RHEL 9 will not work.
-
-### Arch Linux
-
-```sh
-cd packaging && makepkg -si
-```
-
-### Any distribution
-
-The install script installs the dependencies, builds, tests, and installs to `/usr/local`. It stops with a reason rather than guessing, and installs nothing until every dependency is present.
-
-```sh
-curl -fsSL https://raw.githubusercontent.com/AminBlg/foner/main/scripts/install.sh | sh
-```
-
-Into `~/.local` instead, without root:
-
-```sh
-curl -fsSL https://raw.githubusercontent.com/AminBlg/foner/main/scripts/install.sh | FONER_PREFIX=~/.local sh
-```
-
-### From source
-
-```sh
-cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
-cmake --build build -j
-ctest --test-dir build --output-on-failure
-```
-
-[docs/demo-contacts.vcf](docs/demo-contacts.vcf) holds invented contacts, so the search and the contact list can be seen with no phone connected.
-
 ## Usage
 
 ```sh
@@ -149,3 +188,9 @@ See [CONTRIBUTING.md](CONTRIBUTING.md).
 ## License
 
 GPL-3.0-or-later. See [LICENSE](LICENSE).
+
+---
+
+## Beyond KDE Connect
+
+KDE Connect tells you that the phone is ringing. Foner picks up. It answers and dials from the desktop, carries the call audio through this computer, and keeps the phonebook and the call history on disk. No account, no cloud, no telemetry. The call never leaves the phone and the mobile network.

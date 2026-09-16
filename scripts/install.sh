@@ -11,8 +11,11 @@
 # what to do, because a dialler that half-installs is worse than one that
 # never started. Nothing is installed until every dependency is present.
 #
-# FONER_PREFIX=~/.local   install without root
-# FONER_YES=1             do not ask before installing packages
+# FONER_PREFIX=~/.local     install without root
+# FONER_YES=1               do not ask before installing packages
+# FONER_SKIP_PACKAGES=1     you installed the dependencies yourself; build only
+# FONER_OS_RELEASE=<file>   read this instead of /etc/os-release (tests)
+# FONER_DETECT_ONLY=1       print the distribution family and stop (tests)
 
 set -eu
 
@@ -42,10 +45,12 @@ package install and the final copy, so the build stays yours."
 
 # ---------------------------------------------------------------- distribution
 
-[ -r /etc/os-release ] || die "No /etc/os-release, so the distribution cannot be
-identified. Install the dependencies yourself and run: cmake -S . -B build"
-# shellcheck disable=SC1091
-. /etc/os-release
+OS_RELEASE=${FONER_OS_RELEASE:-/etc/os-release}
+ID= ID_LIKE= PRETTY_NAME=
+if [ -r "$OS_RELEASE" ]; then
+    # shellcheck disable=SC1090
+    . "$OS_RELEASE"
+fi
 
 # ID_LIKE is what makes derivatives work without naming every one of them.
 FAMILY=
@@ -57,18 +62,49 @@ for id in ${ID:-} ${ID_LIKE:-}; do
         opensuse*|suse)       FAMILY=suse;   break ;;
     esac
 done
-[ -n "$FAMILY" ] || die "Unrecognised distribution: ${PRETTY_NAME:-${ID:-unknown}}.
 
-Foner needs Qt 6 and these KDE frameworks: Kirigami, KCoreAddons, KDBusAddons,
-KI18n, KContacts, KNotifications, KConfig, KStatusNotifierItem, KItemModels.
-Install them with your package manager, then:
+# Some derivatives set neither a known ID nor ID_LIKE. The package manager on
+# the PATH still says which package names apply.
+if [ -z "$FAMILY" ]; then
+    if   command -v pacman  >/dev/null 2>&1; then FAMILY=arch
+    elif command -v apt-get >/dev/null 2>&1; then FAMILY=debian
+    elif command -v dnf     >/dev/null 2>&1; then FAMILY=fedora
+    elif command -v zypper  >/dev/null 2>&1; then FAMILY=suse
+    fi
+fi
 
-  git clone $REPO && cd foner
-  cmake -S . -B build && cmake --build build && sudo cmake --install build"
+DEPS_HELP="Foner needs Qt 6.5, extra-cmake-modules, and these KDE Frameworks 6.8 packages
+with their development files: Kirigami, KCoreAddons, KDBusAddons, KI18n,
+KContacts, KNotifications, KConfig, KStatusNotifierItem, KItemModels.
+Calls also need PipeWire 1.4 or newer and BlueZ at run time."
 
-say "Distribution: ${PRETTY_NAME:-$ID}  (handled as $FAMILY)"
+if [ -n "$FAMILY" ]; then
+    say "Distribution: ${PRETTY_NAME:-${ID:-unknown}}  (handled as $FAMILY)"
+elif [ "${FONER_SKIP_PACKAGES:-0}" = 1 ]; then
+    say "Distribution: ${PRETTY_NAME:-${ID:-unknown}}  (unrecognised; building with what is installed)"
+else
+    die "Unrecognised distribution: ${PRETTY_NAME:-${ID:-unknown}}.
+
+The script knows the package names for Arch, Debian, Ubuntu, Fedora, and
+openSUSE and their derivatives. On anything else, install the dependencies
+yourself and run the script again with FONER_SKIP_PACKAGES=1, which skips
+the package step and lets cmake report anything still missing.
+
+$DEPS_HELP
+
+Nothing has been installed."
+fi
+
+if [ "${FONER_DETECT_ONLY:-0}" = 1 ]; then
+    say "family=${FAMILY:-none}"
+    exit 0
+fi
 
 # ---------------------------------------------------------------- packages
+
+if [ "${FONER_SKIP_PACKAGES:-0}" = 1 ]; then
+    step "Skipping the package install (FONER_SKIP_PACKAGES=1)"
+else
 
 case "$FAMILY" in
 arch)
@@ -145,7 +181,10 @@ fi
 # Unquoted on purpose: PKGS is a word list, not one argument.
 # shellcheck disable=SC2086
 $INSTALL $PKGS || die "The package manager refused. Nothing has been installed.
-Read its output above: usually a package under a different name on this release."
+Read its output above: usually a package under a different name on this release.
+If you can install the equivalents yourself, run again with FONER_SKIP_PACKAGES=1."
+
+fi
 
 # ---------------------------------------------------------------- versions
 
@@ -220,6 +259,20 @@ esac
 step "Done"
 say "Run it with: foner"
 say ""
-say "Foner needs PipeWire with its telephony module, BlueZ, and a phone paired"
-say "over Bluetooth. Without those it starts and reports that no phone is"
-say "connected, which is the correct behaviour rather than a fault."
+
+# The telephony D-Bus interface arrived in PipeWire 1.4. Older releases build
+# and run Foner but never show a phone, so say so here rather than let the
+# window say "no phone connected" with no hint why.
+# Output looks like "Linked with libpipewire 1.6.8" on its last line.
+PW_VER=$(pipewire --version 2>/dev/null | sed -n 's/^Linked with libpipewire //p' | head -n1)
+case "$PW_VER" in
+    0.*|1.0.*|1.1.*|1.2.*|1.3.*)
+        say "PipeWire $PW_VER is installed. Calls need PipeWire 1.4 or newer, which"
+        say "carries the telephony module. Foner will start but report no phone until"
+        say "this distribution ships PipeWire 1.4." ;;
+    "")
+        say "PipeWire was not found on the PATH. Foner needs PipeWire 1.4 or newer with"
+        say "its telephony module, and BlueZ, to reach a phone." ;;
+    *)
+        say "PipeWire $PW_VER. Pair a phone over Bluetooth and Foner will find it." ;;
+esac

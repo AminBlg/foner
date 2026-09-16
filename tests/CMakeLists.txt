@@ -13,3 +13,5 @@ add_test(NAME callend COMMAND test_callend)
 add_executable(test_contacts test_contacts.cpp)
 target_link_libraries(test_contacts PRIVATE fonercore Qt6::Test)
 add_test(NAME contacts COMMAND test_contacts)
+
+add_test(NAME install_sh COMMAND sh ${CMAKE_CURRENT_SOURCE_DIR}/install_sh_test.sh ${CMAKE_SOURCE_DIR}/scripts/install.sh)

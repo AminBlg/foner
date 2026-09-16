@@ -40,8 +40,11 @@ case "$(uname -m)" in
   git clone $REPO && cd foner && cmake -S . -B build && cmake --build build" ;;
 esac
 
-[ "$(id -u)" -eq 0 ] && die "Do not run this as root. It asks for sudo only for the
+# Detection alone touches nothing, and CI runs its tests as root.
+if [ "$(id -u)" -eq 0 ] && [ "${FONER_DETECT_ONLY:-0}" != 1 ]; then
+    die "Do not run this as root. It asks for sudo only for the
 package install and the final copy, so the build stays yours."
+fi
 
 # ---------------------------------------------------------------- distribution
 

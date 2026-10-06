@@ -14,8 +14,8 @@ Foner is a working desktop dialler. Calls are placed, answered and ended against
 phone, contacts and history arrive over Bluetooth, and the window survives being closed
 because the tray keeps it listening. It is used daily by its author on Arch with Plasma.
 
-It is one person's application on one paired handset. Nothing here ran against a
-second phone model, a second desktop, or a second distribution.
+It is one person's application. It ran against two handsets, one Android phone and one
+iPhone, but not against a second desktop or a second distribution.
 
 | | |
 |---|---|
@@ -138,7 +138,7 @@ changing the answer.
 
 1. **Finish keyboard-only operation.** The audit above says what is wrong. None of it is
    fixed.
-2. **Test on a second phone.** Every interface fact recorded here comes from one handset,
+2. **Test on more phones.** Every interface fact recorded here comes from one handset,
    and some of them are certainly properties of that handset rather than of HFP.
 
 ## Deferred

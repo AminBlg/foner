@@ -31,7 +31,7 @@
 
 Foner is a dialler for KDE Plasma. It sends commands to your phone over the Bluetooth hands-free profile (HFP). The call audio comes through this computer. The call itself stays on the phone and the mobile network. Foner has no account, no cloud service and no telemetry.
 
-Foner 0.1.0 is the first release. Its author uses it every day with one phone on Arch Linux with Plasma. No other phone or desktop is tested yet.
+Foner 0.1.0 is the first release. It was tested with one Android phone and one iPhone, on Arch Linux with Plasma. No other desktop is tested yet.
 
 ## Requirements
 

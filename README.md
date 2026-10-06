@@ -1,5 +1,5 @@
 > [!WARNING]
-> **Foner is under active development** and not yet stable. It runs every day against one phone on one desktop, and nothing else yet. If you want to know when the first release lands, give the repo a **Star** ⭐ and **Watch** 👀 it.
+> **Foner is under active development** and not yet stable. It runs every day against one phone on one desktop, and nothing else yet. If you want to know when the next release lands, give the repo a **Star** ⭐ and **Watch** 👀 it.
 
 <p align="center">
     <img src="packaging/icons/org.unscale.foner.svg" width="138" alt="Foner"/>

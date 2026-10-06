@@ -1,6 +1,7 @@
 # Screenshots
 
-The README shows three: `keypad.png`, `contacts.png` and `in-call.png`.
+The README shows three: `keypad.png`, `contacts.png` and `in-call.png`. Each has a
+`-dark` copy that the README shows in dark mode.
 
 Take them on a machine with a phone paired, so the device bar, a real contact
 list and a live call are visible. A capture from a machine with no phone shows
@@ -11,4 +12,5 @@ Around 520 pixels wide is right. The README scales them to 260, so that is a
 sharp image on a high-density display without a large file.
 
 Do not photograph a real phone number. The demo phonebook in
-`docs/demo-contacts.vcf` uses numbers reserved for documentation.
+`docs/demo-contacts.vcf` uses invented numbers. They sit in a live mobile range,
+so never dial one.

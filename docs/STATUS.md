@@ -1,8 +1,8 @@
 # Foner: project status
 
-Written 2026-09-02. A snapshot of what works, what does not, and what is known about
-the interface underneath. The README describes the application. This describes its
-condition.
+Written 2026-09-02, and updated 2026-10-06 for the `v0.1.0` tag. A snapshot of what
+works, what does not, and what is known about the interface underneath. The README
+describes the application. This describes its condition.
 
 The commit count is low because the history was flattened before publication. A commit
 message carried the author's phone Bluetooth address, and a scan of the tracked files
@@ -19,11 +19,11 @@ second phone model, a second desktop, or a second distribution.
 
 | | |
 |---|---|
-| Version | 0.1.0, untagged |
+| Version | 0.1.0, tagged `v0.1.0` |
 | Source | 6,183 lines of C++ and QML |
 | Tests | 3 binaries, 141 assertions |
 | Requires | Qt 6.5, KDE Frameworks 6.8, and 9 KDE frameworks |
-| Repository | `AminBlg/foner`, private, 7 commits |
+| Repository | `AminBlg/foner` |
 
 ## Proved against a real phone
 
@@ -77,9 +77,6 @@ introspecting a live gateway, and each is recorded so it is not rediscovered.
   which the KDE runtime can lack. Building it needs flatpak-builder, which is not
   installed here, and roughly 1.5 GB of KDE SDK, so the question of what else the runtime
   lacks is still open.
-- **No `v0.1.0` tag exists.** `packaging/PKGBUILD` fetches `git+$url.git#tag=v$pkgver`,
-  so `makepkg` on the committed recipe fails for anyone who tries it. This is the single
-  thing most worth fixing before the repository is shown to anyone.
 
 ## What today's work changed
 
@@ -139,13 +136,9 @@ changing the answer.
 
 ## What I would do next
 
-1. **Tag `v0.1.0`.** Without it the packaging recipe is broken for everyone but its
-   author.
-2. **Make the repository public.** The install command in the README fetches a script
-   over HTTPS, so it works for nobody else while the repository is private.
-3. **Finish keyboard-only operation.** The audit above says what is wrong. None of it is
+1. **Finish keyboard-only operation.** The audit above says what is wrong. None of it is
    fixed.
-4. **Test on a second phone.** Every interface fact recorded here comes from one handset,
+2. **Test on a second phone.** Every interface fact recorded here comes from one handset,
    and some of them are certainly properties of that handset rather than of HFP.
 
 ## Deferred

@@ -67,7 +67,7 @@ These parts can only be tested against a paired phone:
 
 ## Licensing
 
-The project follows REUSE 3.0. Every new file needs an SPDX header:
+Every new file needs an SPDX header:
 
 ```
 // SPDX-FileCopyrightText: 2026 Your Name
@@ -78,4 +78,6 @@ The project follows REUSE 3.0. Every new file needs an SPDX header:
 
 Real phone numbers, Bluetooth addresses, host names, or home directory paths. The
 sample numbers start `+21355000` in international form or `055000` in national form,
-and the sample Bluetooth address is `AA:BB:CC:DD:EE:FF`.
+and the sample Bluetooth address is `AA:BB:CC:DD:EE:FF`. The numbers are invented,
+but 055 is a mobile range that Algeria assigns to Ooredoo. A real subscriber can
+hold any of them, so never dial one.

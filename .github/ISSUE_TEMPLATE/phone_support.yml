@@ -45,6 +45,7 @@ body:
     id: introspect
     attributes:
       label: "`busctl --user call org.pipewire.Telephony /org/pipewire/Telephony org.freedesktop.DBus.ObjectManager GetManagedObjects` output"
+      description: Replace the value of `Address` with `AA:BB:CC:DD:EE:FF` before you paste. It is your phone's Bluetooth address.
       render: text
     validations:
       required: true

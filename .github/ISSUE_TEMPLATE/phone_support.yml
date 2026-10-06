@@ -1,7 +1,6 @@
 name: 📱 Phone Support / Compatibility
 description: A phone is not detected, is not fully supported, or you would like support added.
 title: "[Phone]: "
-labels: ["area: telephony", "needs: triage"]
 body:
   - type: markdown
     attributes:

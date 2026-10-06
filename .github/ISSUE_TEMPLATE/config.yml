@@ -1,8 +1,5 @@
 blank_issues_enabled: false
 contact_links:
-  - name: 💬 Questions & Support (GitHub Discussions)
-    url: https://github.com/AminBlg/foner/discussions
-    about: Usage questions, setup help, and how-tos. Please do not open an issue for support questions.
   - name: 📖 Documentation
     url: https://github.com/AminBlg/foner/tree/main/docs
     about: Status, install, and interface notes. Read here first.

@@ -5,7 +5,12 @@
 <h1 align="center">Foner</h1>
 
 <p align="center">
+  <strong>📞 your phone is ringing in the other room. answer it from your desk</strong>.
+</p>
+
+<p align="center">
   Make and receive phone calls on your KDE desktop, through a phone paired over Bluetooth.
+  <br>The calling part of Windows Phone Link, for Linux. No account, no cloud.
 </p>
 
 <p align="center">
@@ -43,16 +48,18 @@ If one of these is missing, Foner starts and reports that no phone is connected.
 
 ## Install
 
-Run this command as a normal user. The script installs the dependencies, builds Foner, runs the tests, and installs to `/usr/local`. It asks for sudo only for the package install and the final copy.
+Download the install script, read it, then run it as a normal user. The script installs the dependencies, builds Foner, runs the tests, and installs to `/usr/local`. It asks for sudo only for the package install and the final copy.
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/AminBlg/foner/main/scripts/install.sh | sh
+curl -fsSLO https://raw.githubusercontent.com/AminBlg/foner/main/scripts/install.sh
+less install.sh
+sh install.sh
 ```
 
 To install into `~/.local` instead, set `FONER_PREFIX`:
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/AminBlg/foner/main/scripts/install.sh | FONER_PREFIX=~/.local sh
+FONER_PREFIX=~/.local sh install.sh
 ```
 
 The script knows the package names for Arch, Debian, Ubuntu, Fedora, openSUSE and their derivatives. On another distribution, it stops and prints the dependency list. Install those dependencies yourself, then run the script again with `FONER_SKIP_PACKAGES=1`.
@@ -101,11 +108,19 @@ To try the contact list with no phone, open `docs/demo-contacts.vcf` with File >
 
 Two calls at once, service codes and vCard export are built, but nobody tested them against a phone yet. [docs/STATUS.md](docs/STATUS.md) lists what works and the known limits.
 
+## Why Foner
+
+KDE Connect tells you that the phone is ringing. Foner answers it. You dial and talk from the desktop, and the call audio comes through this computer. Windows has this in Phone Link. Foner brings it to Plasma.
+
+[HandsFree for Linux](https://github.com/PavelTarlev1/handsfree-linux) does a similar job with its own hands-free stack. Its README asks you to keep WirePlumber from claiming the hands-free role. Foner uses the telephony module that ships with PipeWire 1.4, so it works with the audio stack that you already run.
+
 ## Documentation
 
 - [docs/STATUS.md](docs/STATUS.md): what works, what does not, and why.
 - [docs/M0-selfio-notes.md](docs/M0-selfio-notes.md): how the PipeWire telephony interface behaves with a live phone.
 - [CONTRIBUTING.md](CONTRIBUTING.md): the build, the tests and the checks for a pull request.
+- [CHANGELOG.md](CHANGELOG.md): what changed in each release.
+- [SECURITY.md](SECURITY.md): how to report a vulnerability privately.
 
 ## Star history
 

@@ -138,3 +138,5 @@ KDE Connect tells you that the phone is ringing. Foner answers it. You dial and 
 ## License
 
 GPL-3.0-or-later. See [LICENSE](LICENSE).
+
+Foner is an independent project. It is not affiliated with Microsoft or KDE e.V. Phone Link is a trademark of Microsoft.

@@ -14,7 +14,7 @@
 #
 # FONER_PREFIX=~/.local     install without root
 # FONER_YES=1               do not ask before installing packages
-# FONER_REF=<tag or branch> build this ref instead of the pinned release tag
+# FONER_REF=<tag or branch> build this ref instead of main
 # FONER_SKIP_PACKAGES=1     you installed the dependencies yourself; build only
 # FONER_OS_RELEASE=<file>   read this instead of /etc/os-release (tests)
 # FONER_DETECT_ONLY=1       print the distribution family and stop (tests)
@@ -22,9 +22,10 @@
 set -eu
 
 REPO=https://github.com/AminBlg/foner.git
-# A tag, so a commit pushed to main later cannot break an install made today.
-# Raise it when a release is tagged.
-REF=${FONER_REF:-v0.1.0}
+# main, so a fix reaches new installs without a new release. CI and the tests
+# this script runs before installing guard against a bad commit. Set FONER_REF
+# to a tag to build a fixed release instead.
+REF=${FONER_REF:-main}
 QT_MIN_MAJOR=6
 QT_MIN_MINOR=5
 

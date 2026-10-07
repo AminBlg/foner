@@ -8,6 +8,10 @@
 #   sh tests/install_sh_test.sh scripts/install.sh
 
 set -eu
+# The installer passes its own environment to ctest. A user on an unknown
+# distribution runs it with FONER_SKIP_PACKAGES=1, and that must not change
+# what these cases expect.
+unset FONER_SKIP_PACKAGES FONER_YES FONER_PREFIX FONER_REF
 SCRIPT=${1:?path to install.sh}
 WORK=$(mktemp -d)
 trap 'rm -rf "$WORK"' EXIT INT TERM

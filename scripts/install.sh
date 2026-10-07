@@ -4,7 +4,8 @@
 #
 # Builds and installs Foner.
 #
-#   curl -fsSL https://raw.githubusercontent.com/AminBlg/foner/main/scripts/install.sh | sh
+#   curl -fsSLO https://raw.githubusercontent.com/AminBlg/foner/main/scripts/install.sh
+#   less install.sh && sh install.sh
 #
 # Refuses rather than guesses. An unknown distribution, a missing package, a
 # Qt that is too old, a failed build: each stops here with a message saying
@@ -13,6 +14,7 @@
 #
 # FONER_PREFIX=~/.local     install without root
 # FONER_YES=1               do not ask before installing packages
+# FONER_REF=<tag or branch> build this ref instead of the pinned release tag
 # FONER_SKIP_PACKAGES=1     you installed the dependencies yourself; build only
 # FONER_OS_RELEASE=<file>   read this instead of /etc/os-release (tests)
 # FONER_DETECT_ONLY=1       print the distribution family and stop (tests)
@@ -20,6 +22,9 @@
 set -eu
 
 REPO=https://github.com/AminBlg/foner.git
+# A tag, so a commit pushed to main later cannot break an install made today.
+# Raise it when a release is tagged.
+REF=${FONER_REF:-v0.1.0}
 QT_MIN_MAJOR=6
 QT_MIN_MINOR=5
 
@@ -215,8 +220,8 @@ WORK=$(mktemp -d)
 trap 'rm -rf "$WORK"' EXIT INT TERM
 
 step "Fetching the source"
-git clone --depth 1 "$REPO" "$WORK/foner" \
-    || die "Could not clone $REPO. Check the network."
+git clone --depth 1 --branch "$REF" "$REPO" "$WORK/foner" \
+    || die "Could not clone $REPO at $REF. Check the network and the name of the ref."
 cd "$WORK/foner"
 
 step "Building"
@@ -240,6 +245,12 @@ case "$PREFIX" in
     *)        sudo cmake --install build ;;
 esac
 
+# The build directory is deleted on exit, and cmake writes its list of
+# installed files there. Keep the list so the install can be removed later.
+MANIFEST_DIR=${XDG_DATA_HOME:-$HOME/.local/share}/foner
+mkdir -p "$MANIFEST_DIR"
+cp build/install_manifest.txt "$MANIFEST_DIR/install_manifest.txt"
+
 # A desktop session takes its PATH from the systemd user manager, not from a
 # shell profile, so ~/.local/bin can be absent there even when the terminal
 # finds it. That produces "Could not find the program 'foner'" from the
@@ -261,6 +272,7 @@ esac
 
 step "Done"
 say "Run it with: foner"
+say "To remove it later, delete the files listed in $MANIFEST_DIR/install_manifest.txt."
 say ""
 
 # The telephony D-Bus interface arrived in PipeWire 1.4. Older releases build

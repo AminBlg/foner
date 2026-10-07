@@ -114,6 +114,30 @@ KDE Connect tells you that the phone is ringing. Foner answers it. You dial and 
 
 [HandsFree for Linux](https://github.com/PavelTarlev1/handsfree-linux) does a similar job with its own hands-free stack. Its README asks you to keep WirePlumber from claiming the hands-free role. Foner uses the telephony module that ships with PipeWire 1.4, so it works with the audio stack that you already run.
 
+## FAQ
+
+Does KDE Connect do this? KDE Connect lists notifications, SMS, a shared clipboard and remote control in its README. That list has no call dialing, and the wiki was not checked. Foner covers the calls.
+
+Which phones work? Foner was tested with one Android phone and one iPhone. Any phone that pairs over the Bluetooth hands-free profile can connect in theory, but only those two ran.
+
+Do I need a phone to try it? You can start Foner without one and import `docs/demo-contacts.vcf` to try the contact search. Calls need a paired phone.
+
+Does it work outside Plasma? Foner is built with Qt and KDE Frameworks. Other desktops were not tested.
+
+Does Foner send my contacts anywhere? Foner has no account and no cloud service. It keeps the phonebook and the call history on your disk.
+
+## Roadmap
+
+- Keyboard-only operation. The keypad keys cannot be reached with Tab yet.
+- Test more phones and more desktops.
+- Package Foner for more distributions.
+
+[docs/STATUS.md](docs/STATUS.md) has the details.
+
+## Uninstall
+
+The install script saves the list of installed files in `~/.local/share/foner/install_manifest.txt`. Delete the files on that list. Files under `/usr/local` need sudo.
+
 ## Documentation
 
 - [docs/STATUS.md](docs/STATUS.md): what works, what does not, and why.

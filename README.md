@@ -136,7 +136,13 @@ Does Foner send my contacts anywhere? Foner has no account and no cloud service.
 
 ## Uninstall
 
-The install script saves the list of installed files in `~/.local/share/foner/install_manifest.txt`. Delete the files on that list. Files under `/usr/local` need sudo.
+The install script saves the list of installed files in `~/.local/share/foner/install_manifest.txt`. To delete the files on that list, run:
+
+```sh
+xargs rm < ~/.local/share/foner/install_manifest.txt
+```
+
+If you installed to `/usr/local`, run the same command with `sudo` before `xargs`.
 
 ## Documentation
 
